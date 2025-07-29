@@ -1,0 +1,77 @@
+# ================== Java Build Files ==================
+target/
+*.class
+*.jar
+*.war
+
+# ================== Maven/Gradle ==================
+logs/
+*.log
+*.gz
+*.tmp
+.cache/
+build/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ================== Spring Boot ==================
+application.properties
+application.yml
+.env
+
+# ================== Firebase ==================
+firebase-adminsdk.json
+serviceAccountKey.json
+service.json
+
+# ================== IntelliJ IDEA ==================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ================== Eclipse / STS ==================
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+
+# ================== VS Code ==================
+.vscode/
+
+# ================== NetBeans ==================
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ================== Logs ==================
+*.log
+
+# ================== OS/System Files ==================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ================== Test Reports ==================
+test-output/
+surefire-reports/
+jacoco.exec
+
+# ================== Frontend (Node/React/Angular) ==================
+node_modules/
+dist/
+.env.local
+.env.development
+.env.production
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
