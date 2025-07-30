@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/zerotrust")
-@CrossOrigin(origins = "*") // optional for frontend calls
+ // optional for frontend calls
 public class ZeroTrustController {
 
     @Autowired

@@ -32,6 +32,7 @@ public class ZeroTrustService {
 
 
     public List<ZeroTrustModel> getAll(){
+        //return zeroTrustRepository.findAll();
         List<ZeroTrustModel> list = zeroTrustRepository.findAll();
         for (ZeroTrustModel item : list) {
             try {
