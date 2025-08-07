@@ -1,8 +1,3 @@
-Here's a **professional and polished GitHub `README.md`** for your **Zero Trust Password Vault** project. You can copy this directly into your project’s root as `README.md`.
-
----
-
-```markdown
 # 🔐 Zero Trust Password Vault
 
 A secure, scalable, and stateless password management backend built using **Spring Boot**, **Firebase Authentication**, and **MySQL**. This API enables authenticated users to store, retrieve, and manage credentials (e.g., Gmail, LinkedIn, etc.) in a fully encrypted vault — aligned with **Zero Trust Security** principles.
