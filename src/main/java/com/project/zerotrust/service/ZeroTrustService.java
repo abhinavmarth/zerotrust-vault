@@ -4,7 +4,11 @@ import com.project.zerotrust.model.ZeroTrustModel;
 import com.project.zerotrust.repository.ZeroTrustRepository;
 import com.project.zerotrust.util.ZeroTrustAES;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 @Service
@@ -12,9 +16,22 @@ public class ZeroTrustService {
     @Autowired
     private ZeroTrustRepository zeroTrustRepository;
 
+    @Autowired
+    private ZeroTrustAES zeroTrustAES;
+
+    public Page<ZeroTrustModel> getUserVaults(String uid, Pageable pageable) {
+        Page<ZeroTrustModel> page = zeroTrustRepository.findByUserId(uid, pageable);
+        page.forEach(item -> {
+            try { item.setPassword(zeroTrustAES.decrypt(item.getPassword())); }
+            catch (Exception e) { item.setPassword("ERROR"); }
+        });
+        return page;
+    }
+
+
     public ZeroTrustModel create(ZeroTrustModel zeroTrustModel, String uid){
         try {
-            String encrypted = ZeroTrustAES.encrypt(zeroTrustModel.getPassword());
+            String encrypted = zeroTrustAES.encrypt(zeroTrustModel.getPassword());
             zeroTrustModel.setPassword(encrypted);
             zeroTrustModel.setUserId(uid); // Set UID from Firebase
             zeroTrustModel.setCreatedAt(System.currentTimeMillis());
@@ -36,7 +53,7 @@ public class ZeroTrustService {
         List<ZeroTrustModel> list = zeroTrustRepository.findAll();
         for (ZeroTrustModel item : list) {
             try {
-                String decrypted = ZeroTrustAES.decrypt(item.getPassword());
+                String decrypted = zeroTrustAES.decrypt(item.getPassword());
                 item.setPassword(decrypted);
             } catch (Exception e) {
                 item.setPassword("ERROR");
@@ -51,10 +68,6 @@ public class ZeroTrustService {
 
     public ZeroTrustModel getbyuserandtitle(String user,String title){
         return zeroTrustRepository.findByUsernameAndTitle(user, title);
-    }
-
-    public List<ZeroTrustModel> findByuseriId(String userId){
-        return zeroTrustRepository.findByUserId(userId);
     }
 }
 

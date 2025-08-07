@@ -1,12 +1,17 @@
 package com.project.zerotrust.contoller;
 
+import org.springframework.data.domain.Page;
 import com.project.zerotrust.model.ZeroTrustModel;
 import com.project.zerotrust.service.ZeroTrustService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -42,14 +47,19 @@ public class ZeroTrustController {
     }
 
     @GetMapping("/user-title")
-    public ResponseEntity<ZeroTrustModel> getByUserAndTitle(@RequestParam String user, @RequestParam String title){
-        return new ResponseEntity<>(zeroTrustService.getbyuserandtitle(user, title), HttpStatus.OK);
+    public ResponseEntity<?> getByUserAndTitle(@RequestParam String user, @RequestParam String title) {
+        ZeroTrustModel model = zeroTrustService.getbyuserandtitle(user, title);
+        if (model == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No record found for given user and title");
+        }
+        return ResponseEntity.ok(model);
     }
 
+
     @GetMapping("/vaults")
-    public ResponseEntity<?> getVaults(HttpServletRequest request) {
+    public Page<ZeroTrustModel> getVaults(HttpServletRequest request,@RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size) {
         String uid = (String) request.getAttribute("firebaseUid");
-        List<ZeroTrustModel> userVaults = zeroTrustService.findByuseriId(uid);
-        return ResponseEntity.ok(userVaults);
+        return zeroTrustService.getUserVaults(uid,PageRequest.of(page, size));
     }
 }

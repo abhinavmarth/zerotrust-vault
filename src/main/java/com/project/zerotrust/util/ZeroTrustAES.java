@@ -1,25 +1,43 @@
 package com.project.zerotrust.util;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+@Component
 public class ZeroTrustAES {
 
-    private static final String SECRET_KEY = "Your16CharSecret";
+    @Value("${app.secretkey}")
+    private String secretKey;
 
-    public static String encrypt(String strToEncrypt) throws Exception{
-        SecretKeySpec secretkey = new SecretKeySpec(SECRET_KEY.getBytes(),"AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE,secretkey);
-        return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes()));
+    private SecretKeySpec secretKeySpec;
+
+    @PostConstruct
+    public void init() {
+        if (secretKey == null || secretKey.length() < 32) {
+            throw new IllegalStateException("Invalid secret key - must be at least 16 characters");
+        }
+        byte[] keyBytes = secretKey.substring(0, 32).getBytes(StandardCharsets.UTF_8);
+        secretKeySpec = new SecretKeySpec(keyBytes, "AES");
     }
 
-    public static String decrypt(String strToDecrypt) throws Exception{
-        SecretKeySpec secretkey = new SecretKeySpec(SECRET_KEY.getBytes(),"AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE,secretkey);
-        return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
+    public String encrypt(String strToEncrypt) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        byte[] encrypted = cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(encrypted);
+    }
+
+    public String decrypt(String strToDecrypt) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");;
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+        byte[] decoded = Base64.getDecoder().decode(strToDecrypt);
+        byte[] decrypted = cipher.doFinal(decoded);
+        return new String(decrypted, StandardCharsets.UTF_8);
     }
 }
