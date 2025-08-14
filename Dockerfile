@@ -1,14 +1,16 @@
-# Use official OpenJDK image as base
+# --------- Stage 1: Build the JAR ---------
+FROM maven:3.8.7-openjdk-17-slim AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# --------- Stage 2: Run the app ---------
 FROM openjdk:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Set working directory inside the container
-WORKDIR /zerotrust
-
-# Copy the jar file into the container
-COPY target/*.jar app.jar
-
-# Expose the port that Spring Boot will use
+# Expose the port Spring Boot runs on
 EXPOSE 8080
 
-# Run the jar file
+# Start the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
