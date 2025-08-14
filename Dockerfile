@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /zerotrust
 
 # Copy the jar file into the container
-COPY target/zerotrust-0.0.1-SNAPSHOT.jar app.jar
+COPY target/*.jar app.jar
 
 # Expose the port that Spring Boot will use
 EXPOSE 8080
