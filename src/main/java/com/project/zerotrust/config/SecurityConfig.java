@@ -18,9 +18,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.csrf().disable().cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/vault/**").authenticated()
+                .requestMatchers("/zerotrust/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
