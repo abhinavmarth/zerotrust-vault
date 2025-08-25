@@ -126,18 +126,11 @@ Open to feedback, improvements, and collaboration!
 
 ---
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ```
 
 ---
 
-### ✅ Tips:
-- Replace `yourname`, `your-project-id`, and other placeholders with real values.
-- If you're using this on GitHub, make sure to **upload a `.gitignore`** that includes `serviceAccountKey.json`, `target/`, and `.env` if applicable.
-- Add a **badge or GitHub Actions status** if you have CI/CD or tests.
 
 Would you like me to help generate the `.gitignore` or Swagger documentation next?
 ```
